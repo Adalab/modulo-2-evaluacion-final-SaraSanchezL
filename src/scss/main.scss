@@ -8,3 +8,20 @@
 @import 'layout/footer';
 @import 'pages/index';
 */
+
+.list {
+  list-style-type: none;
+}
+
+.favourite {
+  background-color: lightblue;
+  color: lightcoral;
+  width: 50vw;
+}
+.containerSections {
+  display: flex;
+  flex-direction: row;
+}
+.sectionFavourites {
+  margin-right: 300px;
+}
