@@ -28,13 +28,22 @@ function getDataSeries () {
           <p>${dataAnime[i].title}</p></li>`;
       }
 
-      const allLi = document.querySelectorAll('.js-li');
-      function getEachLi () {
-        for (const eachLi of allLi) {
-          eachLi.addEventListener('click', (event) => event.currentTarget.classList.toggle('favourite'));
+      function renderListItemFav(event) {
+        const favAnime = event.currentTarget.dataset.title;
+        //console.log(favAnime);
+        event.currentTarget.classList.toggle('favourite');
+        for (let i = 0; i < dataAnime.length; i++) {
+          if (favAnime === dataAnime[i].title)
+          {listFavourites.innerHTML += `<li class="js-li" data-id="${dataAnime[i].mal_id}"> <img class="js-img" src="${dataAnime[i].image_url}" alt="Foto">
+          <p>${dataAnime[i].title}</p></li>`;}
         }
       }
-      getEachLi();
+
+      const allLi = document.querySelectorAll('.js-li');
+      for (const eachLi of allLi) {
+        eachLi.addEventListener('click', (renderListItemFav));
+      }
+
     });
 }
 
