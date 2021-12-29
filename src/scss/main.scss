@@ -1,28 +1,48 @@
 /*
 @import 'core/variables';
 @import 'core/reset';
-@import 'components/code';
-@import 'components/links';
-@import 'layout/page';
-@import 'layout/header';
-@import 'layout/footer';
-@import 'pages/index';
 */
-
-.list,
-.listFavourites {
-  list-style-type: none;
-}
 
 .favourite {
   background-color: lightblue;
   color: lightcoral;
   width: 25vw;
 }
+
+body {
+  background-color: lightgray;
+}
+
+.list,
+.listFavourites {
+  list-style-type: none;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 20px;
+  color: gray;
+}
 .containerSections {
   display: flex;
   flex-direction: row;
+  margin-top: 20px;
 }
 .sectionFavourites {
-  margin-right: 300px;
+  width: 50vw;
+  border: solid lightseagreen 5px;
+  background-color: lightblue;
+}
+.sectionResults {
+  width: 50vw;
+  border: solid lightseagreen 5px;
+  background-color: lightblue;
+}
+.mainTitle {
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  color: red;
+  font-size: 30px;
+}
+.secunTitle {
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  color: darkblue;
+  font-size: 25px;
+  margin-left: 25px;
 }

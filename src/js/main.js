@@ -56,6 +56,7 @@ function getDataSeries () {
           listFavouriteArr.splice(0);
         }
         // Comprobar añadir/quitar con cada uno a favoritos.
+        // Al cargar la pagina, si esta en fav mantener el fondo y la letra.
 
 
         /* const serieDeleteFav = AnimeId;
