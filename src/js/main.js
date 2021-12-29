@@ -29,24 +29,29 @@ function getDataSeries () {
       }
 
       function renderListItemFav(event) {
-        const favAnimeTitle = event.currentTarget.dataset.title;
-        const favAnimeImg = event.currentTarget.dataset.img;
+        const AnimeTitle = event.currentTarget.dataset.title;
+        const AnimeImg = event.currentTarget.dataset.img;
         let dataFav = {
-          img: favAnimeImg,
-          title: favAnimeTitle,
+          img: AnimeImg,
+          title: AnimeTitle,
         };
         event.currentTarget.classList.toggle('favourite');
+        // Buscar la manera de añadir solo 1 vez a favoritos.
         for (let i = 0; i < dataAnime.length; i++) {
-          if (favAnimeTitle === dataAnime[i].title){
-            listFavourites.innerHTML += `<li class="js-li"><img class="js-img" src="${dataAnime[i].image_url}" alt="Foto">
+          if (AnimeTitle === dataAnime[i].title){
+            listFavourites.innerHTML += `<li class="js-li" data-titleFav="${dataAnime[i].title}" ><img class="js-img" src="${dataAnime[i].image_url}" alt="Foto">
           <p>${dataAnime[i].title}</p></li><button class="js-btnX">X</button>`;
           }
         }
-        listFavouriteArr.push(dataFav);
-        // console.log(listFavouriteArr);
-        localStorage.setItem('Fav', JSON.stringify(listFavouriteArr));
-
-      }
+        const favAnimeTitle = event.currentTarget.dataset.titleFav;
+       
+          if(favAnimeTitle === AnimeTitle) {
+            favAnimeTitle.innerHTML = '';
+        }
+          listFavouriteArr.push(dataFav);
+          // console.log(listFavouriteArr);
+          localStorage.setItem('Fav', JSON.stringify(listFavouriteArr));
+        }
       const allLi = document.querySelectorAll('.js-li');
       for (const eachLi of allLi) {
         eachLi.addEventListener('click', (renderListItemFav));
@@ -62,11 +67,15 @@ function useLocalfav () {
     listFavourites.innerHTML = '';
   } else {
     for (const item of localFav) {
-      listFavourites.innerHTML += item.img + item.title;
+      listFavourites.innerHTML += `<li class="js-li"><img class="js-img" src="${item.img}" alt="Foto">
+      <p>${item.title}</p></li><button class="js-btnX">X</button>`;
     }
   }
 }
-useLocalfav ();  // Carga url y no la imagen.
+useLocalfav ();
+
+
+// Hacer que funcione boton individual para borrar fav.
 
 function handleDeleteAllFav (event) {
   event.preventDefault();
