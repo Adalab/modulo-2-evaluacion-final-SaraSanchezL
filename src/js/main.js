@@ -8,7 +8,7 @@ const listFavourites = document.querySelector('.js-listFavourites');
 
 
 
-let listFavouriteAnime = [];
+let listFavouriteArr = [];
 
 
 function getDataSeries () {
@@ -24,21 +24,28 @@ function getDataSeries () {
         } else {
           dataAnime[i].image_url;
         }
-        list.innerHTML += `<li class="js-li" data-title="${dataAnime[i].title}"> <img class="js-img" src="${dataAnime[i].image_url}" alt="Foto">
+        list.innerHTML += `<li class="js-li" data-img="${dataAnime[i].image_url}" data-title="${dataAnime[i].title}"> <img class="js-img" src="${dataAnime[i].image_url}" alt="Foto">
           <p>${dataAnime[i].title}</p></li>`;
       }
 
       function renderListItemFav(event) {
-        const favAnime = event.currentTarget.dataset.title;
-        //console.log(favAnime);
+        const favAnimeTitle = event.currentTarget.dataset.title;
+        const favAnimeImg = event.currentTarget.dataset.img;
+        let dataFav = {
+          img: favAnimeImg,
+          title: favAnimeTitle,
+        };
         event.currentTarget.classList.toggle('favourite');
         for (let i = 0; i < dataAnime.length; i++) {
-          if (favAnime === dataAnime[i].title)
-          {listFavourites.innerHTML += `<li class="js-li" data-id="${dataAnime[i].mal_id}"> <img class="js-img" src="${dataAnime[i].image_url}" alt="Foto">
+          if (favAnimeTitle === dataAnime[i].title)
+          {listFavourites.innerHTML += `<li class="js-li"><img class="js-img" src="${dataAnime[i].image_url}" alt="Foto">
           <p>${dataAnime[i].title}</p></li>`;}
         }
-      }
 
+        listFavouriteArr.push(dataFav);
+        console.log(listFavouriteArr);
+        localStorage.setItem('Fav', JSON.stringify(listFavouriteArr));
+      }
       const allLi = document.querySelectorAll('.js-li');
       for (const eachLi of allLi) {
         eachLi.addEventListener('click', (renderListItemFav));
@@ -47,6 +54,18 @@ function getDataSeries () {
     });
 }
 
+function useLocalfav () {
+  const localFav = JSON.parse(localStorage.getItem('Fav'));
+  console.log(localFav);
+  for (const item of localFav) {
+    if (localFav === null) {
+      listFavourites.innerHTML = '';
+    } else {
+      listFavourites.innerHTML += item.img + item.title;
+    }
+  }
+}
+useLocalfav ();
 
 
 function handleClickSearch(event) {
