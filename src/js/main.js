@@ -5,8 +5,7 @@ const btnReset = document.querySelector('.js-btnReset');
 const list = document.querySelector('.js-list');
 const inputSearch = document.querySelector('.js-inputSearch');
 const listFavourites = document.querySelector('.js-listFavourites');
-
-
+const btnDeleteAllFav = document.querySelector('.js-btnDeleteAll');
 
 let listFavouriteArr = [];
 
@@ -18,6 +17,7 @@ function getDataSeries () {
       const dataAnime = data.results;
       list.innerHTML = '';
       for (let i = 0; i < dataAnime.length; i++) {
+        //Comprobar si sustituye la imagen.
         if (dataAnime[i].image_url === '') {
           dataAnime[i].image_url = `https://via.placeholder.com/210x295/ffffff/666666/?
           text=${inputSearch.value}`;
@@ -37,14 +37,15 @@ function getDataSeries () {
         };
         event.currentTarget.classList.toggle('favourite');
         for (let i = 0; i < dataAnime.length; i++) {
-          if (favAnimeTitle === dataAnime[i].title)
-          {listFavourites.innerHTML += `<li class="js-li"><img class="js-img" src="${dataAnime[i].image_url}" alt="Foto">
-          <p>${dataAnime[i].title}</p></li>`;}
+          if (favAnimeTitle === dataAnime[i].title){
+            listFavourites.innerHTML += `<li class="js-li"><img class="js-img" src="${dataAnime[i].image_url}" alt="Foto">
+          <p>${dataAnime[i].title}</p></li><button class="js-btnX">X</button>`;
+          }
         }
-
         listFavouriteArr.push(dataFav);
-        console.log(listFavouriteArr);
+        // console.log(listFavouriteArr);
         localStorage.setItem('Fav', JSON.stringify(listFavouriteArr));
+
       }
       const allLi = document.querySelectorAll('.js-li');
       for (const eachLi of allLi) {
@@ -56,16 +57,23 @@ function getDataSeries () {
 
 function useLocalfav () {
   const localFav = JSON.parse(localStorage.getItem('Fav'));
-  console.log(localFav);
-  for (const item of localFav) {
-    if (localFav === null) {
-      listFavourites.innerHTML = '';
-    } else {
+  // console.log(localFav);
+  if (localFav === null) {
+    listFavourites.innerHTML = '';
+  } else {
+    for (const item of localFav) {
       listFavourites.innerHTML += item.img + item.title;
     }
   }
 }
-useLocalfav ();
+useLocalfav ();  // Carga url y no la imagen.
+
+function handleDeleteAllFav (event) {
+  event.preventDefault();
+  listFavourites.innerHTML = '';
+  localStorage.removeItem('Fav');
+}
+btnDeleteAllFav.addEventListener('click', (handleDeleteAllFav));
 
 
 function handleClickSearch(event) {
