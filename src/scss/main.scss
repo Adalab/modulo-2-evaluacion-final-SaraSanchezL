@@ -4,9 +4,9 @@
 */
 
 .favourite {
-  background-color: lightblue;
-  color: lightcoral;
-  width: 25vw;
+  background-color: yellow;
+  color: orangered;
+  width: 15vw;
 }
 
 body {
@@ -17,32 +17,46 @@ body {
 .listFavourites {
   list-style-type: none;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
-  font-size: 20px;
-  color: gray;
+  color: darkslategray;
 }
 .containerSections {
   display: flex;
   flex-direction: row;
   margin-top: 20px;
 }
-.sectionFavourites {
-  width: 50vw;
-  border: solid lightseagreen 5px;
-  background-color: lightblue;
-}
+.sectionFavourites,
 .sectionResults {
   width: 50vw;
-  border: solid lightseagreen 5px;
+  border: solid lightseagreen 3px;
   background-color: lightblue;
 }
 .mainTitle {
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
-  color: red;
-  font-size: 30px;
+  color: orangered;
+  font-size: 40px;
+  background-color: gold;
+  width: 36vw;
+  border-radius: 50%;
 }
 .secunTitle {
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   color: darkblue;
   font-size: 25px;
   margin-left: 25px;
+}
+.container {
+  text-align: center;
+  background-color: pink;
+  height: 30px;
+  border-radius: 20%;
+}
+.btnSearch,
+.btnReset,
+.btnDeleteAll {
+  border-radius: 20%;
+  font-weight: bold;
+  background-color: lightgreen;
+}
+.inputSearch {
+  border-color: lightgreen;
 }

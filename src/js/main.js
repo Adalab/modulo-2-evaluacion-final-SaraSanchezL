@@ -45,31 +45,24 @@ function getDataSeries () {
           img: AnimeImg,
           title: AnimeTitle,
           id: AnimeId,
-          class: classFav,
+          // class: classFav,
         };
 
         if (classFav === true){
-          listFavourites.innerHTML += `<li class="js-li" data-id="${dataFav.mal_id}" ><img class="js-img" src="${dataFav.img}" alt="Foto">
+          listFavourites.innerHTML += `<li class="js-li" data-id="${dataFav.id}" data-img="${dataFav.img}" data-title="${dataFav.title}"> <img class="js-img" src="${dataFav.img}" alt="Foto">
           <p>${dataFav.title}</p><button class="js-btnX">X</button></li>`;
         } else {
           listFavourites.innerHTML = '';
-          listFavouriteArr.splice(0);
+          //listFavouriteArr.splice(0);
+          listFavouriteArr = [];
+
         }
+
+        // Comprobar localStorage, no se vacía correctamente.
         // Comprobar añadir/quitar con cada uno a favoritos.
+        // Comprobar al quitar de fav individualmente, se quita del localStorage.
+        // Hacer que funcione boton individual para borrar fav.
         // Al cargar la pagina, si esta en fav mantener el fondo y la letra.
-
-
-        /* const serieDeleteFav = AnimeId;
-        const FavIndex = listFavouriteArr.findIndex(( serie ) => serie.id === serieDeleteFav);
-        const ListIndex = listSeries.findIndex((serie => serie.id === serieDeleteFav));
-        if (FavIndex === ListIndex) {
-          listFavouriteArr.splice(FavIndex, 1);
-           const FavIndex = listFavouriteArr.findIndex(( serie ) => serie.class === false);
-          const ListIndex = listSeries.findIndex(( serie ) => serie.class === false);
-          if (ListIndex === FavIndex) {
-          listFavouriteArr.splice(FavIndex, 1);
-          console.log(FavIndex);
-          console.log(listFavouriteArr);*/
 
         listFavouriteArr.push(dataFav);
         localStorage.setItem('Fav', JSON.stringify(listFavouriteArr));
@@ -80,17 +73,6 @@ function getDataSeries () {
         eachLi.addEventListener('click', (renderListItemFav));
       }
 
-      // Hacer que funcione boton individual para borrar fav.
-      /*
-      const allBtn = document.querySelectorAll('.js-btnX');
-      for (const eachBtn of allBtn) {
-        eachBtn.addEventListener('click', (handleClickDeleteBtn));
-      }
-      function handleClickDeleteBtn (event) {
-        event.currentTarget;
-        listFavourites.innerHTML = '';
-      }*/
-
     });
 }
 
@@ -100,7 +82,7 @@ function useLocalfav () {
     listFavourites.innerHTML = '';
   } else {
     for (const item of localFav) {
-      listFavourites.innerHTML +=  `<li class="js-li" data-id="${item.id}" ><img class="js-img" src="${item.img}" alt="Foto">
+      listFavourites.innerHTML +=  `<li class="js-li" data-id="${item.id}" data-img="${item.img}" data-title="${item.title}"> <img class="js-img" src="${item.img}" alt="Foto">
       <p>${item.title}</p><button class="js-btnX">X</button></li>`;
       listFavouriteArr.push(item);
     }
