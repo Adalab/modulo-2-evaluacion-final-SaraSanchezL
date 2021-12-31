@@ -27,23 +27,21 @@ function getDataSeries () {
         } else {
           imgData;
         }
-        list.innerHTML += `<li class="js-li" data-id="${dataAnime[i].mal_id}" data-title="${dataAnime[i].title}"> <img class="js-img" src="${dataAnime[i].image_url}" alt="Foto">
-          <p>${dataAnime[i].title}</p></li>`;
+        list.innerHTML += `<li class="js-li" data-id="${dataAnime[i].mal_id}" data-title="${dataAnime[i].title}"> <img class="js-img" src="${dataAnime[i].image_url}" alt="Foto"><p>${dataAnime[i].title}</p></li>`;
       }
 
 
       function renderListItemFav(event) {
         event.currentTarget.classList.toggle('favourite');
-        const AnimeTitle = event.currentTarget.dataset.title;
-        for (const anime of listSeriesArr) {
+        const serieTitle = event.currentTarget.dataset.title;
+        for (const iSerie of listSeriesArr) {
           let favData = {
-            title: anime.title,
-            img: anime.image_url,
-            id: anime.mal_id,
+            title: iSerie.title,
+            img: iSerie.image_url,
+            id: iSerie.mal_id,
           };
-          if (AnimeTitle === anime.title) {
-            listFavourites.innerHTML += `<li class="js-li" data-id="${anime.mal_id}" data-title="${anime.title}"> <img class="js-img" src="${anime.image_url}" alt="Foto">
-          <p>${anime.title}</p><button class="js-btnX">X</button></li>`;
+          if (serieTitle === iSerie.title) {
+            listFavourites.innerHTML += `<li class="js-li" data-id="${favData.id}" data-title="${favData.title}"> <img class="js-img" src="${favData.img}" alt="Foto"> <p>${favData.title}</p><button class="js-btnX">X</button></li>`;
             listFavouriteArr.push(favData);
             localStorage.setItem('Fav', JSON.stringify(listFavouriteArr));
           }
@@ -83,8 +81,7 @@ function useLocalfav () {
     listFavourites.innerHTML = '';
   } else {
     for (const item of localFav) {
-      listFavourites.innerHTML +=  `<li class="js-li" data-id="${item.id}" data-img="${item.img}" data-title="${item.title}"> <img class="js-img" src="${item.img}" alt="Foto">
-      <p>${item.title}</p><button class="js-btnX">X</button></li>`;
+      listFavourites.innerHTML +=  `<li class="js-li" data-id="${item.id}" data-title="${item.title}"> <img class="js-img" src="${item.img}" alt="Foto"><p>${item.title}</p><button class="js-btnX">X</button></li>`;
       listFavouriteArr.push(item);
     }
   }
