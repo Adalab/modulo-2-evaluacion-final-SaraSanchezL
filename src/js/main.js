@@ -27,40 +27,55 @@ function getDataSeries () {
         } else {
           imgData;
         }
-        list.innerHTML += `<li class="js-li" data-id="${dataAnime[i].mal_id}" data-title="${dataAnime[i].title}"> <img class="js-img" src="${dataAnime[i].image_url}" alt="Foto"><p>${dataAnime[i].title}</p></li>`;
+        list.innerHTML += `<li class="js-li" data-id="${dataAnime[i].mal_id}" data-title="${dataAnime[i].title}"> <img class="js-img" src="${dataAnime[i].image_url}" alt="Serie Image"><p>${dataAnime[i].title}</p></li>`;
       }
 
 
       function renderListItemFav(event) {
-        event.currentTarget.classList.toggle('favourite');
         const serieTitle = event.currentTarget.dataset.title;
-        for (const iSerie of listSeriesArr) {
+        for (const eachSerie of listSeriesArr) {
           let favData = {
-            title: iSerie.title,
-            img: iSerie.image_url,
-            id: iSerie.mal_id,
+            mal_id: eachSerie.mal_id,
+            url: eachSerie.url,
+            image_url: eachSerie.image_url,
+            title: eachSerie.title,
+            airing: eachSerie.airing,
+            synopsis: eachSerie.synopsis,
+            type: eachSerie.type,
+            episodes: eachSerie.episodes,
+            score: eachSerie.score,
+            start_date: eachSerie.start_date,
+            end_date: eachSerie.end_date,
+            members: eachSerie.members,
+            rated: eachSerie.rated,
           };
-          if (serieTitle === iSerie.title) {
-            listFavourites.innerHTML += `<li class="js-li" data-id="${favData.id}" data-title="${favData.title}"> <img class="js-img" src="${favData.img}" alt="Foto"> <p>${favData.title}</p><button class="js-btnX">X</button></li>`;
+          if (serieTitle === eachSerie.title) {
+            event.currentTarget.classList.add('favourite');
+            listFavourites.innerHTML += `<li class="js-li" data-id="${favData.mal_id}" data-title="${favData.title}"> <img class="js-img" src="${favData.image_url}" alt="Serie Image"> <p>${favData.title}</p><button class="js-btnX">X</button></li>`;
             listFavouriteArr.push(favData);
             localStorage.setItem('Fav', JSON.stringify(listFavouriteArr));
           }
         }
-      }
 
-      /* function compare () {
-          const selectSerieResults = listSeriesArr.find(  row  => row.title ===  AnimeTitle  );
-          console.log(selectSerieResults);
-          const serieFav = listFavouriteArr.find(  row => row.title === AnimeTitle );
-          console.log(serieFav);
 
-          if (selectSerieResults.title && serieFav.title === AnimeTitle) {
-            console.log('No añadir');
+        /* function compare () {
+
+          for (const item of listFavouriteArr){
+            console.log(item);
+            // const selectSerieResults = listSeriesArr.find(  row  => row.title ===  serieTitle  );
+            // console.log(selectSerieResults);
+            const serieFav = listFavouriteArr.find(  row => row.title === serieTitle );
+            console.log(serieFav);
+            if (item.title && serieFav.title === serieTitle) {
+              listFavouriteArr.splice(item);
+            } else {
+              listFavourites.innerHTML = `<li class="js-li" data-id="${item.mal_id}" data-title="${item.title}"> <img class="js-img" src="${item.image_url}" alt="Foto"> <p>${item.title}</p><button class="js-btnX">X</button></li>`;
+            }
           }
+
         }
-      } */
-
-
+        compare ();*/
+      }
       // Comprobar una lista con otra para que solo se añada 1 vez a fav cada serie.
       // Comprobar añadir/quitar con cada uno a favoritos.
       // Hacer que funcione boton individual para borrar fav, y del localSt.
@@ -81,7 +96,7 @@ function useLocalfav () {
     listFavourites.innerHTML = '';
   } else {
     for (const item of localFav) {
-      listFavourites.innerHTML +=  `<li class="js-li" data-id="${item.id}" data-title="${item.title}"> <img class="js-img" src="${item.img}" alt="Foto"><p>${item.title}</p><button class="js-btnX">X</button></li>`;
+      listFavourites.innerHTML +=  `<li class="js-li" data-id="${item.mal_id}" data-title="${item.title}"> <img class="js-img" src="${item.image_url}" alt="Serie Image"> <p>${item.title}</p><button class="js-btnX">X</button></li>`;
       listFavouriteArr.push(item);
     }
   }
@@ -103,8 +118,8 @@ function handleClickSearch(event) {
   getDataSeries();
 }
 
-function handleClickReset (ev) {
-  ev.preventDefault();
+function handleClickReset (event) {
+  event.preventDefault();
   list.innerHTML = '';
   inputSearch.value = '';
 }
