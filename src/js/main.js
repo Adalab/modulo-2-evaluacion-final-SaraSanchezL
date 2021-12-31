@@ -7,7 +7,7 @@ const inputSearch = document.querySelector('.js-inputSearch');
 const listFavourites = document.querySelector('.js-listFavourites');
 const btnDeleteAllFav = document.querySelector('.js-btnDeleteAll');
 
-let listSeries = [];  // Comprobar si se utiliza.
+let listSeriesArr = [];
 let listFavouriteArr = [];
 
 
@@ -16,6 +16,7 @@ function getDataSeries () {
     .then(response => response.json())
     .then(data => {
       const dataAnime = data.results;
+      listSeriesArr = dataAnime;
       list.innerHTML = '';
       for (let i = 0; i < dataAnime.length; i++) {
         const imgData = dataAnime[i].image_url;
@@ -26,47 +27,47 @@ function getDataSeries () {
         } else {
           imgData;
         }
-        list.innerHTML += `<li class="js-li" data-id="${dataAnime[i].mal_id}" data-img="${dataAnime[i].image_url}" data-title="${dataAnime[i].title}"> <img class="js-img" src="${dataAnime[i].image_url}" alt="Foto">
+        list.innerHTML += `<li class="js-li" data-id="${dataAnime[i].mal_id}" data-title="${dataAnime[i].title}"> <img class="js-img" src="${dataAnime[i].image_url}" alt="Foto">
           <p>${dataAnime[i].title}</p></li>`;
-        let listSeriesOb = {
-          img: dataAnime[i].image_url,
-          title: dataAnime[i].title,
-          id: dataAnime[i].mal_id,
-        };
-        listSeries.push(listSeriesOb);
       }
+
 
       function renderListItemFav(event) {
+        event.currentTarget.classList.toggle('favourite');
         const AnimeTitle = event.currentTarget.dataset.title;
-        const AnimeImg = event.currentTarget.dataset.img;
-        const AnimeId = event.currentTarget.dataset.id;
-        const classFav = event.currentTarget.classList.toggle('favourite');
-        let dataFav = {
-          img: AnimeImg,
-          title: AnimeTitle,
-          id: AnimeId,
-          // class: classFav,
-        };
-
-        if (classFav === true){
-          listFavourites.innerHTML += `<li class="js-li" data-id="${dataFav.id}" data-img="${dataFav.img}" data-title="${dataFav.title}"> <img class="js-img" src="${dataFav.img}" alt="Foto">
-          <p>${dataFav.title}</p><button class="js-btnX">X</button></li>`;
-        } else {
-          listFavourites.innerHTML = '';
-          //listFavouriteArr.splice(0);
-          listFavouriteArr = [];
-
+        for (const anime of listSeriesArr) {
+          let favData = {
+            title: anime.title,
+            img: anime.image_url,
+            id: anime.mal_id,
+          };
+          if (AnimeTitle === anime.title) {
+            listFavourites.innerHTML += `<li class="js-li" data-id="${anime.mal_id}" data-title="${anime.title}"> <img class="js-img" src="${anime.image_url}" alt="Foto">
+          <p>${anime.title}</p><button class="js-btnX">X</button></li>`;
+            listFavouriteArr.push(favData);
+            localStorage.setItem('Fav', JSON.stringify(listFavouriteArr));
+          }
         }
-
-        // Comprobar localStorage, no se vacía correctamente.
-        // Comprobar añadir/quitar con cada uno a favoritos.
-        // Comprobar al quitar de fav individualmente, se quita del localStorage.
-        // Hacer que funcione boton individual para borrar fav.
-        // Al cargar la pagina, si esta en fav mantener el fondo y la letra.
-
-        listFavouriteArr.push(dataFav);
-        localStorage.setItem('Fav', JSON.stringify(listFavouriteArr));
       }
+
+      /* function compare () {
+          const selectSerieResults = listSeriesArr.find(  row  => row.title ===  AnimeTitle  );
+          console.log(selectSerieResults);
+          const serieFav = listFavouriteArr.find(  row => row.title === AnimeTitle );
+          console.log(serieFav);
+
+          if (selectSerieResults.title && serieFav.title === AnimeTitle) {
+            console.log('No añadir');
+          }
+        }
+      } */
+
+
+      // Comprobar una lista con otra para que solo se añada 1 vez a fav cada serie.
+      // Comprobar añadir/quitar con cada uno a favoritos.
+      // Hacer que funcione boton individual para borrar fav, y del localSt.
+      // Al cargar la pagina, si esta en fav mantener el fondo y la letra.
+
 
       const allLi = document.querySelectorAll('.js-li');
       for (const eachLi of allLi) {
@@ -95,6 +96,7 @@ function handleDeleteAllFav (event) {
   event.preventDefault();
   listFavourites.innerHTML = '';
   localStorage.removeItem('Fav');
+  listFavouriteArr = [];
 }
 btnDeleteAllFav.addEventListener('click', (handleDeleteAllFav));
 
