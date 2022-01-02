@@ -27,7 +27,7 @@ function getDataSeries () {
         } else {
           imgData;
         }
-        list.innerHTML += `<li class="js-li" data-id="${dataAnime[i].mal_id}"> <img class="js-img" src="${dataAnime[i].image_url}" alt="Serie Image"><p>${dataAnime[i].title}</p></li>`;
+        list.innerHTML += `<li class="js-li" data-id="${dataAnime[i].mal_id}"> <img class="js-img cursorSelectFav" src="${dataAnime[i].image_url}" alt="Serie Image"><p class="cursorSelectFav">${dataAnime[i].title}</p></li>`;
       }
 
 
@@ -52,7 +52,7 @@ function getDataSeries () {
 
           if (serieID === eachSerie.mal_id) {
             event.currentTarget.classList.add('favourite');
-            listFavourites.innerHTML += `<li class="js-li" data-id="${favData.mal_id}"> <img class="js-img" src="${favData.image_url}" alt="Serie Image"> <p>${favData.title}</p><button class="js-btnX" id="${favData.mal_id}">X</button></li>`;
+            listFavourites.innerHTML += `<li class="js-li" data-id="${favData.mal_id}"> <img class="js-img" src="${favData.image_url}" alt="Serie Image"> <p>${favData.title}</p><button class="js-btnX colorBtnX" id="${favData.mal_id}">X</button></li>`;
             listFavouriteArr.push(favData);
             localStorage.setItem('Fav', JSON.stringify(listFavouriteArr));
           }
@@ -77,7 +77,7 @@ function getDataSeries () {
         listFavouriteArr.splice(resultFav, 1);
         localStorage.setItem('Fav', JSON.stringify(listFavouriteArr));
         for (const eachfav of listFavouriteArr) {
-          listFavourites.innerHTML += `<li class="js-li" data-id="${eachfav.mal_id}"> <img class="js-img" src="${eachfav.image_url}" alt="Serie Image"> <p>${eachfav.title}</p><button class="js-btnX" id="${eachfav.mal_id}">X</button></li>`;
+          listFavourites.innerHTML += `<li class="js-li" data-id="${eachfav.mal_id}"> <img class="js-img" src="${eachfav.image_url}" alt="Serie Image"> <p>${eachfav.title}</p><button class="js-btnX colorBtnX" id="${eachfav.mal_id}">X</button></li>`;
           const allBtnX = document.querySelectorAll('.js-btnX');
           for (const eachBtn of allBtnX) {
             eachBtn.addEventListener('click', handleClickdeleteOne);
@@ -93,7 +93,7 @@ function useLocalfav () {
     listFavourites.innerHTML = '';
   } else {
     for (const item of localFav) {
-      listFavourites.innerHTML +=  `<li class="js-li" data-id="${item.mal_id}"> <img class="js-img" src="${item.image_url}" alt="Serie Image"> <p>${item.title}</p><button class="js-btnX" id="${item.mal_id}">X</button></li>`;
+      listFavourites.innerHTML +=  `<li class="js-li" data-id="${item.mal_id}"> <img class="js-img" src="${item.image_url}" alt="Serie Image"> <p>${item.title}</p><button class="js-btnX colorBtnX" id="${item.mal_id}">X</button></li>`;
       listFavouriteArr.push(item);
     }
   }
@@ -108,7 +108,7 @@ function useLocalfav () {
     listFavouriteArr.splice(resultFav, 1);
     localStorage.setItem('Fav', JSON.stringify(listFavouriteArr));
     for (const eachfav of listFavouriteArr) {
-      listFavourites.innerHTML += `<li class="js-li" data-id="${eachfav.mal_id}"> <img class="js-img" src="${eachfav.image_url}" alt="Serie Image"> <p>${eachfav.title}</p><button class="js-btnX" id="${eachfav.mal_id}">X</button></li>`;
+      listFavourites.innerHTML += `<li class="js-li" data-id="${eachfav.mal_id}"> <img class="js-img" src="${eachfav.image_url}" alt="Serie Image"> <p>${eachfav.title}</p><button class="js-btnX colorBtnX" id="${eachfav.mal_id}">X</button></li>`;
       const allBtnX = document.querySelectorAll('.js-btnX');
       for (const eachBtn of allBtnX) {
         eachBtn.addEventListener('click', handleClickdeleteOneLocal);
