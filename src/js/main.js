@@ -27,12 +27,12 @@ function getDataSeries () {
         } else {
           imgData;
         }
-        list.innerHTML += `<li class="js-li" data-id="${dataAnime[i].mal_id}" data-title="${dataAnime[i].title}"> <img class="js-img" src="${dataAnime[i].image_url}" alt="Serie Image"><p>${dataAnime[i].title}</p></li>`;
+        list.innerHTML += `<li class="js-li" data-id="${dataAnime[i].mal_id}"> <img class="js-img" src="${dataAnime[i].image_url}" alt="Serie Image"><p>${dataAnime[i].title}</p></li>`;
       }
 
 
-      function renderListItemFav(event) {
-        const serieTitle = event.currentTarget.dataset.title;
+      function handleClickrenderListFav(event) {
+        const serieID = parseInt(event.currentTarget.dataset.id);
         for (const eachSerie of listSeriesArr) {
           let favData = {
             mal_id: eachSerie.mal_id,
@@ -49,42 +49,39 @@ function getDataSeries () {
             members: eachSerie.members,
             rated: eachSerie.rated,
           };
-          if (serieTitle === eachSerie.title) {
+
+
+          if (serieID === eachSerie.mal_id) {
             event.currentTarget.classList.add('favourite');
-            listFavourites.innerHTML += `<li class="js-li" data-id="${favData.mal_id}" data-title="${favData.title}"> <img class="js-img" src="${favData.image_url}" alt="Serie Image"> <p>${favData.title}</p><button class="js-btnX">X</button></li>`;
+            listFavourites.innerHTML += `<li class="js-li" data-id="${favData.mal_id}"> <img class="js-img" src="${favData.image_url}" alt="Serie Image"> <p>${favData.title}</p><button class="js-btnX" id="${favData.mal_id}">X</button></li>`;
             listFavouriteArr.push(favData);
             localStorage.setItem('Fav', JSON.stringify(listFavouriteArr));
           }
-        }
 
-
-        /* function compare () {
-
-          for (const item of listFavouriteArr){
-            console.log(item);
-            // const selectSerieResults = listSeriesArr.find(  row  => row.title ===  serieTitle  );
-            // console.log(selectSerieResults);
-            const serieFav = listFavouriteArr.find(  row => row.title === serieTitle );
-            console.log(serieFav);
-            if (item.title && serieFav.title === serieTitle) {
-              listFavouriteArr.splice(item);
-            } else {
-              listFavourites.innerHTML = `<li class="js-li" data-id="${item.mal_id}" data-title="${item.title}"> <img class="js-img" src="${item.image_url}" alt="Foto"> <p>${item.title}</p><button class="js-btnX">X</button></li>`;
-            }
-          }
 
         }
-        compare ();*/
+        const allBtnX = document.querySelectorAll('.js-btnX');
+        for (const eachBtn of allBtnX) {
+          eachBtn.addEventListener('click', handleClickdeleteOne);
+        }
+
       }
-      // Comprobar una lista con otra para que solo se añada 1 vez a fav cada serie.
-      // Comprobar añadir/quitar con cada uno a favoritos.
-      // Hacer que funcione boton individual para borrar fav, y del localSt.
-      // Al cargar la pagina, si esta en fav mantener el fondo y la letra.
-
 
       const allLi = document.querySelectorAll('.js-li');
       for (const eachLi of allLi) {
-        eachLi.addEventListener('click', (renderListItemFav));
+        eachLi.addEventListener('click', (handleClickrenderListFav));
+      }
+
+      function handleClickdeleteOne (event) {
+        const eachIdBtn = event.currentTarget.id;
+        listFavourites.innerHTML = '';
+        const resultFav = listFavouriteArr.findIndex( ((row) => row.mal_id === parseInt(eachIdBtn)));
+        listFavouriteArr.splice(resultFav, 1);
+        localStorage.setItem('Fav', JSON.stringify(listFavouriteArr));
+        for (const eachfav of listFavouriteArr) {
+          listFavourites.innerHTML += `<li class="js-li" data-id="${eachfav.mal_id}"> <img class="js-img" src="${eachfav.image_url}" alt="Serie Image"> <p>${eachfav.title}</p><button class="js-btnX" id="${eachfav.mal_id}">X</button></li>`;
+        }
+
       }
 
     });
@@ -96,12 +93,28 @@ function useLocalfav () {
     listFavourites.innerHTML = '';
   } else {
     for (const item of localFav) {
-      listFavourites.innerHTML +=  `<li class="js-li" data-id="${item.mal_id}" data-title="${item.title}"> <img class="js-img" src="${item.image_url}" alt="Serie Image"> <p>${item.title}</p><button class="js-btnX">X</button></li>`;
+      listFavourites.innerHTML +=  `<li class="js-li" data-id="${item.mal_id}"> <img class="js-img" src="${item.image_url}" alt="Serie Image"> <p>${item.title}</p><button class="js-btnX" id="${item.mal_id}">X</button></li>`;
       listFavouriteArr.push(item);
     }
   }
 }
 useLocalfav ();
+
+
+const allBtnX = document.querySelectorAll('.js-btnX');
+for (const eachBtn of allBtnX) {
+  eachBtn.addEventListener('click', handleClickdeleteOneLocal);
+}
+function handleClickdeleteOneLocal (event) {
+  const eachIdBtn = event.currentTarget.id;
+  listFavourites.innerHTML = '';
+  const resultFav = listFavouriteArr.findIndex( ((row) => row.mal_id === parseInt(eachIdBtn)));
+  listFavouriteArr.splice(resultFav, 1);
+  localStorage.setItem('Fav', JSON.stringify(listFavouriteArr));
+  for (const eachfav of listFavouriteArr) {
+    listFavourites.innerHTML += `<li class="js-li" data-id="${eachfav.mal_id}"> <img class="js-img" src="${eachfav.image_url}" alt="Serie Image"> <p>${eachfav.title}</p><button class="js-btnX" id="${eachfav.mal_id}">X</button></li>`;
+  }
+}
 
 
 function handleDeleteAllFav (event) {
@@ -111,6 +124,7 @@ function handleDeleteAllFav (event) {
   listFavouriteArr = [];
 }
 btnDeleteAllFav.addEventListener('click', (handleDeleteAllFav));
+
 
 
 function handleClickSearch(event) {
@@ -128,3 +142,9 @@ function handleClickReset (event) {
 btnSearch.addEventListener('click', handleClickSearch);
 btnReset.addEventListener('click', handleClickReset);
 
+
+
+// Comprobar una lista con otra para que solo se añada 1 vez a fav cada serie.
+// Comprobar añadir/quitar con cada uno a favoritos en la lista de results.
+// Hacer que funcione boton individual para borrar fav, y del localSt. Solo se quita 1 cada vez que se ejecuta el evento renderFav. (un evento dentro de otro).
+// Al cargar la pagina, si esta en fav mantener el fondo y la letra.
