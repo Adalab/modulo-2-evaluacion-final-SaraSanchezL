@@ -4,9 +4,9 @@
 */
 
 .favourite {
-  background-color: yellow;
+  background-color: greenyellow;
   color: orangered;
-  width: 15vw;
+  width: 230px;
 }
 .colorBtnX {
   background-color: red;
@@ -16,6 +16,11 @@
 }
 .cursorSelectFav {
   cursor: pointer;
+}
+.colorLi {
+  border: orchid 1px solid;
+  width: 230px;
+  margin-bottom: 5px;
 }
 
 body {
@@ -28,6 +33,7 @@ body {
   font-family: "Courier New", Courier, monospace;
   font-weight: bold;
   color: darkslategray;
+  font-size: 20px;
 }
 
 .containerSections {

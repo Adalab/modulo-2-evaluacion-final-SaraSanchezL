@@ -28,7 +28,7 @@ function getDataSeries () {
         } else {
           imgData;
         }
-        listResults.innerHTML += `<li class="js-li" id="${dataAnime[i].mal_id}" data-id="${dataAnime[i].mal_id}"> <img class="js-img cursorSelectFav" src="${dataAnime[i].image_url}" alt="Serie Image"><p class="cursorSelectFav">${dataAnime[i].title}</p></li>`;
+        listResults.innerHTML += `<li class="js-li colorLi" id="${dataAnime[i].mal_id}" data-id="${dataAnime[i].mal_id}"> <img class="js-img cursorSelectFav" src="${dataAnime[i].image_url}" alt="Serie Image"><p class="cursorSelectFav">${dataAnime[i].title}</p></li>`;
       }
 
       function handleClickRenderListFav(event) {
@@ -64,7 +64,7 @@ function getDataSeries () {
               localStorage.setItem('Fav', JSON.stringify(listFavouriteArr));
             }
             for (const eachFav of listFavouriteArr){
-              listFavourites.innerHTML += `<li class="js-li" data-id="${eachFav.malId}"> <img class="js-img" src="${eachFav.imageUrl}" alt="Serie Image"> <p>${eachFav.title}</p><button class="js-btnX colorBtnX" id="${eachFav.malId}">X</button></li>`;
+              listFavourites.innerHTML += `<li class="js-li colorLi" data-id="${eachFav.malId}"> <img class="js-img" src="${eachFav.imageUrl}" alt="Serie Image"> <p>${eachFav.title}</p><button class="js-btnX colorBtnX" id="${eachFav.malId}">X</button></li>`;
             }
           }
         }
@@ -99,7 +99,7 @@ function useLocalFav () {
     listFavourites.innerHTML = '';
   } else {
     for (const itemLocal of localFav) {
-      listFavourites.innerHTML += `<li class="js-li" data-id="${itemLocal.malId}"> <img class="js-img" src="${itemLocal.imageUrl}" alt="Serie Image"> <p>${itemLocal.title}</p><button class="js-btnX colorBtnX" id="${itemLocal.malId}">X</button></li>`;
+      listFavourites.innerHTML += `<li class="js-li colorLi" data-id="${itemLocal.malId}"> <img class="js-img" src="${itemLocal.imageUrl}" alt="Serie Image"> <p>${itemLocal.title}</p><button class="js-btnX colorBtnX" id="${itemLocal.malId}">X</button></li>`;
       listFavouriteArr.push(itemLocal);
     }
   }
@@ -120,7 +120,7 @@ function handleClickDeleteOne (event) {
   listFavouriteArr.splice(resultFav, 1);
   localStorage.setItem('Fav', JSON.stringify(listFavouriteArr));
   for (const eachFav of listFavouriteArr) {
-    listFavourites.innerHTML += `<li class="js-li" data-id="${eachFav.malId}"> <img class="js-img" src="${eachFav.imageUrl}" alt="Serie Image"> <p>${eachFav.title}</p><button class="js-btnX colorBtnX" id="${eachFav.malId}">X</button></li>`;
+    listFavourites.innerHTML += `<li class="js-li colorLi" data-id="${eachFav.malId}"> <img class="js-img" src="${eachFav.imageUrl}" alt="Serie Image"> <p>${eachFav.title}</p><button class="js-btnX colorBtnX" id="${eachFav.malId}">X</button></li>`;
     const allBtnX = document.querySelectorAll('.js-btnX');
     for (const eachBtn of allBtnX) {
       eachBtn.addEventListener('click', handleClickDeleteOne);
