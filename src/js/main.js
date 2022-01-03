@@ -35,32 +35,35 @@ function getDataSeries () {
         const serieID = parseInt(event.currentTarget.dataset.id);
         for (const eachSerie of listSeriesArr) {
           let favData = {
-            mal_id: eachSerie.mal_id,
+            malId: eachSerie.mal_id,
             url: eachSerie.url,
-            image_url: eachSerie.image_url,
+            imageUrl: eachSerie.image_url,
             title: eachSerie.title,
             airing: eachSerie.airing,
             synopsis: eachSerie.synopsis,
             type: eachSerie.type,
             episodes: eachSerie.episodes,
             score: eachSerie.score,
-            start_date: eachSerie.start_date,
-            end_date: eachSerie.end_date,
+            startDate: eachSerie.start_date,
+            endDate: eachSerie.end_date,
             members: eachSerie.members,
             rated: eachSerie.rated,
           };
 
           if (serieID === eachSerie.mal_id) {
             listFavourites.innerHTML = '';
-            event.currentTarget.classList.add('favourite');
+            event.currentTarget.classList.toggle('favourite');
 
             const resultFav = listFavouriteArr.findIndex((row => row.mal_id === serieID));
             if (resultFav === -1) {
               listFavouriteArr.push(favData);
               localStorage.setItem('Fav', JSON.stringify(listFavouriteArr));
+            } else {
+              listFavouriteArr.splice(resultFav, 1);
+              localStorage.setItem('Fav', JSON.stringify(listFavouriteArr));
             }
             for (const eachFav of listFavouriteArr){
-              listFavourites.innerHTML += `<li class="js-li" id ="${eachFav.mal_id}" data-id="${eachFav.mal_id}"> <img class="js-img" src="${eachFav.image_url}" alt="Serie Image"> <p>${eachFav.title}</p><button class="js-btnX colorBtnX" id="${eachFav.mal_id}">X</button></li>`;
+              listFavourites.innerHTML += `<li class="js-li" data-id="${eachFav.mal_id}"> <img class="js-img" src="${eachFav.image_url}" alt="Serie Image"> <p>${eachFav.title}</p><button class="js-btnX colorBtnX" id="${eachFav.mal_id}">X</button></li>`;
             }
           }
         }
@@ -96,7 +99,7 @@ function useLocalFav () {
     listFavourites.innerHTML = '';
   } else {
     for (const item of localFav) {
-      listFavourites.innerHTML +=  `<li class="js-li" id="${item.mal_id}" data-id="${item.mal_id}"> <img class="js-img" src="${item.image_url}" alt="Serie Image"> <p>${item.title}</p><button class="js-btnX colorBtnX" id="${item.mal_id}">X</button></li>`;
+      listFavourites.innerHTML +=  `<li class="js-li" data-id="${item.mal_id}"> <img class="js-img" src="${item.image_url}" alt="Serie Image"> <p>${item.title}</p><button class="js-btnX colorBtnX" id="${item.mal_id}">X</button></li>`;
       listFavouriteArr.push(item);
     }
   }
@@ -158,8 +161,3 @@ function handleClickReset (event) {
 btnSearch.addEventListener('click', handleClickSearch);
 btnReset.addEventListener('click', handleClickReset);
 
-
-//Comprobar si sustituye la imagen.
-// Comprobar una lista con otra para que solo se añada 1 vez a fav cada serie.
-// Comprobar añadir/quitar con cada uno a favoritos al clickar en la lista de results.
-// Al cargar la pagina, si esta en fav mantener el fondo y la letra.
