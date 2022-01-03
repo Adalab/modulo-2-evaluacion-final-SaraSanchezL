@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="./assets/css/main.css">
+  <title>Evaluacion final</title>
+</head>
+
+<body>
+  <main>
+    <h1 class="mainTitle">Buscador de Series de Anime</h1>
+
+    <form action="">
+      <input class="inputSearch js-inputSearch" type="text" placeholder="Escriba aquí su búsqueda...">
+      <input class="btnSearch js-btnSearch" disabled type="button" value="Buscar">
+      <input class="btnReset js-btnReset" type="button" value="Reset">
+      <p class="textError js-textError"></p>
+    </form>
+
+    <div class="containerSections">
+      <section class="sectionFavourites">
+        <div class="container">
+          <h2 class="secunTitle">Favoritas</h2>
+        </div>
+        <ul class="listFavourites js-listFavourites">
+        </ul>
+        <button class="btnDeleteAll js-btnDeleteAll">Borrar Lista</button>
+      </section>
+      <section class="sectionResults">
+        <div class="container">
+          <h2 class="secunTitle">Resultados</h2>
+        </div>
+        <ul class="list js-list">
+        </ul>
+      </section>
+    </div>
+
+
+  </main>
+
+  <script src="./assets/js/main.js"></script>
+</body>
+
+</html>
