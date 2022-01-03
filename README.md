@@ -4,7 +4,9 @@ El ejercicio consiste en desarrollar una aplicación web de búsqueda de series 
 El ejercicio también tiene una parte de maquetación con HTML y Sass, os recomendamos dedicar esfuerzo a la maquetación una vez terminada la parte de JavaScript, ya que los criterios de evaluación están
 relacionados con esta última.
 
-## Vamos de definir los distintos hitos del ejercicio:
+## Para poder trabajar sobre este ejercicio necesitamos el Web Starter Kit.
+
+### Vamos de definir los distintos hitos del ejercicio:
 
 1. Estructura básica
    En primer lugar hay que realizar una estructura básica sobre este modelo. No hay que preocuparse por las medidas, colores ni tipografía hasta un hito posterior.
