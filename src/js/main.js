@@ -1,5 +1,6 @@
 'use strict';
 
+// Variables globales.
 const btnSearch = document.querySelector('.js-btnSearch');
 const btnReset = document.querySelector('.js-btnReset');
 const listResults = document.querySelector('.js-list');
@@ -11,7 +12,7 @@ const textError = document.querySelector('.js-textError');
 let listSeriesArr = [];
 let listFavouriteArr = [];
 
-
+// Función petición servidor + función evento btn buscar para pintar en resultados, función evento Li para pintar en favoritos.
 function getDataSeries () {
   fetch(`https://api.jikan.moe/v3/search/anime?q=${inputSearch.value}`)
     .then(response => response.json())
@@ -54,7 +55,7 @@ function getDataSeries () {
             listFavourites.innerHTML = '';
             event.currentTarget.classList.toggle('favourite');
 
-            const resultFav = listFavouriteArr.findIndex((row => row.mal_id === serieID));
+            const resultFav = listFavouriteArr.findIndex((row => row.malId === serieID));
             if (resultFav === -1) {
               listFavouriteArr.push(favData);
               localStorage.setItem('Fav', JSON.stringify(listFavouriteArr));
@@ -63,16 +64,14 @@ function getDataSeries () {
               localStorage.setItem('Fav', JSON.stringify(listFavouriteArr));
             }
             for (const eachFav of listFavouriteArr){
-              listFavourites.innerHTML += `<li class="js-li" data-id="${eachFav.mal_id}"> <img class="js-img" src="${eachFav.image_url}" alt="Serie Image"> <p>${eachFav.title}</p><button class="js-btnX colorBtnX" id="${eachFav.mal_id}">X</button></li>`;
+              listFavourites.innerHTML += `<li class="js-li" data-id="${eachFav.malId}"> <img class="js-img" src="${eachFav.imageUrl}" alt="Serie Image"> <p>${eachFav.title}</p><button class="js-btnX colorBtnX" id="${eachFav.malId}">X</button></li>`;
             }
           }
         }
-
         const allBtnX = document.querySelectorAll('.js-btnX');
         for (const eachBtn of allBtnX) {
           eachBtn.addEventListener('click', handleClickDeleteOne);
         }
-
       }
 
       const allLi = document.querySelectorAll('.js-li');
@@ -81,10 +80,10 @@ function getDataSeries () {
       }
 
       for (const eachFav of listFavouriteArr) {
-        const ID = eachFav.mal_id;
+        const oneIdFav = eachFav.malId;
         for (const oneLi of allLi){
-          const liID = parseInt(oneLi.id);
-          if (liID === ID) {
+          const oneIdLi = parseInt(oneLi.id);
+          if (oneIdLi === oneIdFav) {
             oneLi.classList.add('favourite');
           }
         }
@@ -93,32 +92,35 @@ function getDataSeries () {
     });
 }
 
+// Funcion usar datos LocalStorage.
 function useLocalFav () {
   const localFav = JSON.parse(localStorage.getItem('Fav'));
   if (localFav === null) {
     listFavourites.innerHTML = '';
   } else {
-    for (const item of localFav) {
-      listFavourites.innerHTML +=  `<li class="js-li" data-id="${item.mal_id}"> <img class="js-img" src="${item.image_url}" alt="Serie Image"> <p>${item.title}</p><button class="js-btnX colorBtnX" id="${item.mal_id}">X</button></li>`;
-      listFavouriteArr.push(item);
+    for (const itemLocal of localFav) {
+      listFavourites.innerHTML += `<li class="js-li" data-id="${itemLocal.malId}"> <img class="js-img" src="${itemLocal.imageUrl}" alt="Serie Image"> <p>${itemLocal.title}</p><button class="js-btnX colorBtnX" id="${itemLocal.malId}">X</button></li>`;
+      listFavouriteArr.push(itemLocal);
     }
   }
 
 }
 useLocalFav ();
 
+// Funcion boton X de listFav.
 const allBtnX = document.querySelectorAll('.js-btnX');
 for (const eachBtn of allBtnX) {
   eachBtn.addEventListener('click', handleClickDeleteOne);
 }
 function handleClickDeleteOne (event) {
+  event.preventDefault();
   const eachIdBtn = event.currentTarget.id;
   listFavourites.innerHTML = '';
-  const resultFav = listFavouriteArr.findIndex( ((row) => row.mal_id === parseInt(eachIdBtn)));
+  const resultFav = listFavouriteArr.findIndex( ((row) => row.malId === parseInt(eachIdBtn)));
   listFavouriteArr.splice(resultFav, 1);
   localStorage.setItem('Fav', JSON.stringify(listFavouriteArr));
-  for (const eachfav of listFavouriteArr) {
-    listFavourites.innerHTML += `<li class="js-li" data-id="${eachfav.mal_id}"> <img class="js-img" src="${eachfav.image_url}" alt="Serie Image"> <p>${eachfav.title}</p><button class="js-btnX colorBtnX" id="${eachfav.mal_id}">X</button></li>`;
+  for (const eachFav of listFavouriteArr) {
+    listFavourites.innerHTML += `<li class="js-li" data-id="${eachFav.malId}"> <img class="js-img" src="${eachFav.imageUrl}" alt="Serie Image"> <p>${eachFav.title}</p><button class="js-btnX colorBtnX" id="${eachFav.malId}">X</button></li>`;
     const allBtnX = document.querySelectorAll('.js-btnX');
     for (const eachBtn of allBtnX) {
       eachBtn.addEventListener('click', handleClickDeleteOne);
@@ -126,13 +128,13 @@ function handleClickDeleteOne (event) {
   }
 }
 
+// Funciones Input, boton Buscar, Reset y Borrar Lista.
 function handleDeleteAllFav (event) {
   event.preventDefault();
   listFavourites.innerHTML = '';
   localStorage.removeItem('Fav');
   listFavouriteArr = [];
 }
-btnDeleteAllFav.addEventListener('click', (handleDeleteAllFav));
 
 function handleInputSearch () {
   if (inputSearch.value === '') {
@@ -143,7 +145,6 @@ function handleInputSearch () {
     btnSearch.removeAttribute('disabled');
   }
 }
-inputSearch.addEventListener('keyup', handleInputSearch);
 
 function handleClickSearch(event) {
   event.preventDefault();
@@ -158,6 +159,8 @@ function handleClickReset (event) {
   handleInputSearch ();
 }
 
+btnDeleteAllFav.addEventListener('click', (handleDeleteAllFav));
+inputSearch.addEventListener('keyup', handleInputSearch);
 btnSearch.addEventListener('click', handleClickSearch);
 btnReset.addEventListener('click', handleClickReset);
 
