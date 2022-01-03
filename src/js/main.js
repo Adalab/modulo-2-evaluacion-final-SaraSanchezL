@@ -13,11 +13,6 @@ let listFavouriteArr = [];
 
 
 function getDataSeries () {
-  if (inputSearch.value === '') {
-    textError.innerHTML = 'Campo de búsqueda vacío';
-  } else {
-    textError.innerHTML = '';
-  }
   fetch(`https://api.jikan.moe/v3/search/anime?q=${inputSearch.value}`)
     .then(response => response.json())
     .then(data => {
@@ -26,16 +21,14 @@ function getDataSeries () {
       listResults.innerHTML = '';
       for (let i = 0; i < dataAnime.length; i++) {
         const imgData = dataAnime[i].image_url;
-        //Comprobar si sustituye la imagen.
-        if (imgData === '') {
+        if (imgData === null) {
           imgData.innerHTML = `https://via.placeholder.com/210x295/ffffff/666666/?
           text=${inputSearch.value}`;
         } else {
           imgData;
         }
-        listResults.innerHTML += `<li class="js-li" data-id="${dataAnime[i].mal_id}"> <img class="js-img cursorSelectFav" src="${dataAnime[i].image_url}" alt="Serie Image"><p class="cursorSelectFav">${dataAnime[i].title}</p></li>`;
+        listResults.innerHTML += `<li class="js-li" id="${dataAnime[i].mal_id}" data-id="${dataAnime[i].mal_id}"> <img class="js-img cursorSelectFav" src="${dataAnime[i].image_url}" alt="Serie Image"><p class="cursorSelectFav">${dataAnime[i].title}</p></li>`;
       }
-
 
       function handleClickRenderListFav(event) {
         event.preventDefault();
@@ -60,10 +53,14 @@ function getDataSeries () {
           if (serieID === eachSerie.mal_id) {
             listFavourites.innerHTML = '';
             event.currentTarget.classList.add('favourite');
-            listFavouriteArr.push(favData);
-            localStorage.setItem('Fav', JSON.stringify(listFavouriteArr));
+
+            const resultFav = listFavouriteArr.findIndex((row => row.mal_id === serieID));
+            if (resultFav === -1) {
+              listFavouriteArr.push(favData);
+              localStorage.setItem('Fav', JSON.stringify(listFavouriteArr));
+            }
             for (const eachFav of listFavouriteArr){
-              listFavourites.innerHTML += `<li class="js-li" data-id="${eachFav.mal_id}"> <img class="js-img" src="${eachFav.image_url}" alt="Serie Image"> <p>${eachFav.title}</p><button class="js-btnX colorBtnX" id="${eachFav.mal_id}">X</button></li>`;
+              listFavourites.innerHTML += `<li class="js-li" id ="${eachFav.mal_id}" data-id="${eachFav.mal_id}"> <img class="js-img" src="${eachFav.image_url}" alt="Serie Image"> <p>${eachFav.title}</p><button class="js-btnX colorBtnX" id="${eachFav.mal_id}">X</button></li>`;
             }
           }
         }
@@ -79,6 +76,17 @@ function getDataSeries () {
       for (const eachLi of allLi) {
         eachLi.addEventListener('click', (handleClickRenderListFav));
       }
+
+      for (const eachFav of listFavouriteArr) {
+        const ID = eachFav.mal_id;
+        for (const oneLi of allLi){
+          const liID = parseInt(oneLi.id);
+          if (liID === ID) {
+            oneLi.classList.add('favourite');
+          }
+        }
+      }
+
     });
 }
 
@@ -88,7 +96,7 @@ function useLocalFav () {
     listFavourites.innerHTML = '';
   } else {
     for (const item of localFav) {
-      listFavourites.innerHTML +=  `<li class="js-li" data-id="${item.mal_id}"> <img class="js-img" src="${item.image_url}" alt="Serie Image"> <p>${item.title}</p><button class="js-btnX colorBtnX" id="${item.mal_id}">X</button></li>`;
+      listFavourites.innerHTML +=  `<li class="js-li" id="${item.mal_id}" data-id="${item.mal_id}"> <img class="js-img" src="${item.image_url}" alt="Serie Image"> <p>${item.title}</p><button class="js-btnX colorBtnX" id="${item.mal_id}">X</button></li>`;
       listFavouriteArr.push(item);
     }
   }
@@ -123,6 +131,17 @@ function handleDeleteAllFav (event) {
 }
 btnDeleteAllFav.addEventListener('click', (handleDeleteAllFav));
 
+function handleInputSearch () {
+  if (inputSearch.value === '') {
+    textError.innerHTML = 'Campo de búsqueda vacío';
+    btnSearch.setAttribute('disabled', 'disabled');
+  } else {
+    textError.innerHTML = '';
+    btnSearch.removeAttribute('disabled');
+  }
+}
+inputSearch.addEventListener('keyup', handleInputSearch);
+
 function handleClickSearch(event) {
   event.preventDefault();
   getDataSeries();
@@ -133,6 +152,7 @@ function handleClickReset (event) {
   listResults.innerHTML = '';
   inputSearch.value = '';
   textError.innerHTML = '';
+  handleInputSearch ();
 }
 
 btnSearch.addEventListener('click', handleClickSearch);
