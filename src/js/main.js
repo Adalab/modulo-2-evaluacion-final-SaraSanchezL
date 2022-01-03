@@ -107,7 +107,7 @@ function useLocalFav () {
 }
 useLocalFav ();
 
-// Funcion boton X de listFav.
+// Funcion boton X de list fav.
 const allBtnX = document.querySelectorAll('.js-btnX');
 for (const eachBtn of allBtnX) {
   eachBtn.addEventListener('click', handleClickDeleteOne);
