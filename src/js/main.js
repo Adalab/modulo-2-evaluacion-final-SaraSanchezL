@@ -96,7 +96,6 @@ function useLocalFav () {
       listFavouriteArr.push(itemLocal);
     }
   }
-
 }
 useLocalFav ();
 
