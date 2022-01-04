@@ -12,7 +12,7 @@ const textError = document.querySelector('.js-textError');
 let listSeriesArr = [];
 let listFavouriteArr = [];
 
-// Función petición servidor + función evento btn buscar para pintar en resultados, función evento Li para pintar en favoritos.
+// Función petición servidor + función evento btn buscar para pintar resultados, función evento Li para pintar favoritos.
 function getDataSeries () {
   fetch(`https://api.jikan.moe/v3/search/anime?q=${inputSearch.value}`)
     .then(response => response.json())
@@ -109,9 +109,11 @@ function handleClickDeleteOne (event) {
   event.preventDefault();
   const eachIdBtn = event.currentTarget.id;
   listFavourites.innerHTML = '';
+
   const resultFav = listFavouriteArr.findIndex( ((row) => row.malId === parseInt(eachIdBtn)));
   listFavouriteArr.splice(resultFav, 1);
   localStorage.setItem('Fav', JSON.stringify(listFavouriteArr));
+
   for (const eachFav of listFavouriteArr) {
     listFavourites.innerHTML += `<li class="js-li colorLi" data-id="${eachFav.malId}"> <img class="js-img" src="${eachFav.imageUrl}" alt="Serie Image"> <p>${eachFav.title}</p><button class="js-btnX colorBtnX" title="Pulse para borrar de la lista" id="${eachFav.malId}">X</button></li>`;
     const allBtnX = document.querySelectorAll('.js-btnX');
