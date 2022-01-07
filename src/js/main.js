@@ -73,19 +73,18 @@ function getDataSeries () {
 
         function handleClickListFav (event) {
           const liIdFav = parseInt(event.currentTarget.dataset.id);
-         // console.log(liIdFav);
-          for (const eachFav of listFavouriteArr){
-            if (liIdFav === eachFav.malId){
-             // console.log(eachFav.title);
-            }
+          // console.log(liIdFav);
+          const resultFindFav = listFavouriteArr.find ((row => row.malId === liIdFav));
+          if (resultFindFav !== -1){
+            console.log(resultFindFav.title);
           }
         }
+
         const allLiFav = document.querySelectorAll('.js-liFav');
         for (const eachLiFav of allLiFav) {
           eachLiFav.addEventListener('click', handleClickListFav);
         }
       }
-
       const allLi = document.querySelectorAll('.js-li');
       for (const eachLi of allLi) {
         eachLi.addEventListener('click', (handleClickRenderListFav));
