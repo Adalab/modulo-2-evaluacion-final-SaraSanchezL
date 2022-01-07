@@ -73,10 +73,10 @@ function getDataSeries () {
 
         function handleClickListFav (event) {
           const liIdFav = parseInt(event.currentTarget.dataset.id);
-          console.log(liIdFav);
+         // console.log(liIdFav);
           for (const eachFav of listFavouriteArr){
             if (liIdFav === eachFav.malId){
-              console.log(eachFav.title);
+             // console.log(eachFav.title);
             }
           }
         }
