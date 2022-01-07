@@ -21,7 +21,12 @@ function getDataSeries () {
       listSeriesArr = dataAnime;
       listResults.innerHTML = '';
       for (let i = 0; i < dataAnime.length; i++) {
-        listResults.innerHTML += `<li class="js-li colorLi" id="${dataAnime[i].mal_id}" data-id="${dataAnime[i].mal_id}"> <img class="js-img cursorSelectFav" title="Marcar / Desmarcar Favorita" src="${dataAnime[i].image_url}" alt="Serie Image"><p class="cursorSelectFav" title="Marcar / Desmarcar Favorita">${dataAnime[i].title}</p></li>`;
+        if (dataAnime[i].airing === false) {
+          listResults.innerHTML += `<li class="js-li colorLi" id="${dataAnime[i].mal_id}" data-id="${dataAnime[i].mal_id}"> <img class="js-img cursorSelectFav" title="Marcar / Desmarcar Favorita" src="${dataAnime[i].image_url}" alt="Serie Image"><p class="cursorSelectFav" title="Marcar / Desmarcar Favorita">${dataAnime[i].title}</p> <p> ${dataAnime[i].airing} : No se está transmitiendo. </p> </li>`;
+
+        } else {
+          listResults.innerHTML += `<li class="js-li colorLi" id="${dataAnime[i].mal_id}" data-id="${dataAnime[i].mal_id}"> <img class="js-img cursorSelectFav" title="Marcar / Desmarcar Favorita" src="${dataAnime[i].image_url}" alt="Serie Image"><p class="cursorSelectFav" title="Marcar / Desmarcar Favorita">${dataAnime[i].title}</p> <p> ${dataAnime[i].airing} <a href="${dataAnime[i].url}">Mas detalles</a> </p> </li>`;
+        }
       }
 
       function handleClickRenderListFav(event) {
@@ -57,13 +62,27 @@ function getDataSeries () {
               localStorage.setItem('Fav', JSON.stringify(listFavouriteArr));
             }
             for (const eachFav of listFavouriteArr){
-              listFavourites.innerHTML += `<li class="js-li colorLi" data-id="${eachFav.malId}"> <img class="js-img" src="${eachFav.imageUrl}" alt="Serie Image"> <p>${eachFav.title}</p><button class="js-btnX colorBtnX" title="Pulse para borrar de la lista" id="${eachFav.malId}">X</button></li>`;
+              listFavourites.innerHTML += `<li class="js-liFav colorLi" data-id="${eachFav.malId}"> <img class="js-img" src="${eachFav.imageUrl}" alt="Serie Image"> <p>${eachFav.title}</p><button class="js-btnX colorBtnX" title="Pulse para borrar de la lista" id="${eachFav.malId}">X</button></li>`;
             }
           }
         }
         const allBtnX = document.querySelectorAll('.js-btnX');
         for (const eachBtn of allBtnX) {
           eachBtn.addEventListener('click', handleClickDeleteOne);
+        }
+
+        function handleClickListFav (event) {
+          const liIdFav = parseInt(event.currentTarget.dataset.id);
+          console.log(liIdFav);
+          for (const eachFav of listFavouriteArr){
+            if (liIdFav === eachFav.malId){
+              console.log(eachFav.title);
+            }
+          }
+        }
+        const allLiFav = document.querySelectorAll('.js-liFav');
+        for (const eachLiFav of allLiFav) {
+          eachLiFav.addEventListener('click', handleClickListFav);
         }
       }
 
