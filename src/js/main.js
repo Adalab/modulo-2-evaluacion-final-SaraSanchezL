@@ -76,7 +76,7 @@ function getDataSeries () {
           // console.log(liIdFav);
           const resultFindFav = listFavouriteArr.find ((row => row.malId === liIdFav));
           if (resultFindFav !== -1){
-            console.log(resultFindFav.title);
+            //console.log(resultFindFav.title);
           }
         }
 
