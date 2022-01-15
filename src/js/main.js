@@ -12,79 +12,33 @@ const textError = document.querySelector('.js-textError');
 let listSeriesArr = [];
 let listFavouriteArr = [];
 
-// Función petición servidor + función evento btn buscar para pintar resultados, función evento Li para pintar favoritos.
+
+// Función petición servidor, añadir evento click resultados para pintar en fav, pintar como favorito en resultados si esta en array fav.
 function getDataSeries () {
   fetch(`https://api.jikan.moe/v3/search/anime?q=${inputSearch.value}`)
     .then(response => response.json())
     .then(data => {
       const dataAnime = data.results;
-      listSeriesArr = dataAnime;
+      const dataMapAnime = dataAnime.map((anime => {
+        const objectDataAnime = {
+          id: anime.mal_id,
+          title: anime.title,
+          img: anime.image_url,
+          airing: anime.airing,
+          url: anime.url};
+        return objectDataAnime;
+      }));
+      listSeriesArr = dataMapAnime;
       listResults.innerHTML = '';
-      for (let i = 0; i < dataAnime.length; i++) {
+      for (let i = 0; i < listSeriesArr.length; i++) {
         if (dataAnime[i].airing === false) {
-          listResults.innerHTML += `<li class="js-li colorLi" id="${dataAnime[i].mal_id}" data-id="${dataAnime[i].mal_id}"> <img class="js-img cursorSelectFav" title="Marcar / Desmarcar Favorita" src="${dataAnime[i].image_url}" alt="Serie Image"><p class="cursorSelectFav" title="Marcar / Desmarcar Favorita">${dataAnime[i].title}</p> <p> ${dataAnime[i].airing} : No se está transmitiendo. </p> </li>`;
+          listResults.innerHTML += `<li class="js-li colorLi" id="${listSeriesArr[i].id}" data-id="${listSeriesArr[i].id}"> <img class="js-img cursorSelectFav" title="Marcar / Desmarcar Favorita" src="${listSeriesArr[i].img}" alt="Serie Image"><p class="cursorSelectFav" title="Marcar / Desmarcar Favorita">${listSeriesArr[i].title}</p> <p> ${listSeriesArr[i].airing} : No se está transmitiendo. </p> </li>`;
 
         } else {
-          listResults.innerHTML += `<li class="js-li colorLi" id="${dataAnime[i].mal_id}" data-id="${dataAnime[i].mal_id}"> <img class="js-img cursorSelectFav" title="Marcar / Desmarcar Favorita" src="${dataAnime[i].image_url}" alt="Serie Image"><p class="cursorSelectFav" title="Marcar / Desmarcar Favorita">${dataAnime[i].title}</p> <p> ${dataAnime[i].airing} <a href="${dataAnime[i].url}">Mas detalles</a> </p> </li>`;
+          listResults.innerHTML += `<li class="js-li colorLi" id="${listSeriesArr[i].id}" data-id="${listSeriesArr[i].id}"> <img class="js-img cursorSelectFav" title="Marcar / Desmarcar Favorita" src="${listSeriesArr[i].img}" alt="Serie Image"><p class="cursorSelectFav" title="Marcar / Desmarcar Favorita">${listSeriesArr[i].title}</p> <p> ${listSeriesArr[i].airing} <a href="${listSeriesArr[i].url}">Mas detalles</a> </p> </li>`;
         }
       }
 
-      function handleClickRenderListFav(event) {
-        event.preventDefault();
-        const serieID = parseInt(event.currentTarget.dataset.id);
-        for (const eachSerie of listSeriesArr) {
-          let favData = {
-            malId: eachSerie.mal_id,
-            url: eachSerie.url,
-            imageUrl: eachSerie.image_url,
-            title: eachSerie.title,
-            airing: eachSerie.airing,
-            synopsis: eachSerie.synopsis,
-            type: eachSerie.type,
-            episodes: eachSerie.episodes,
-            score: eachSerie.score,
-            startDate: eachSerie.start_date,
-            endDate: eachSerie.end_date,
-            members: eachSerie.members,
-            rated: eachSerie.rated,
-          };
-
-          if (serieID === eachSerie.mal_id) {
-            listFavourites.innerHTML = '';
-            event.currentTarget.classList.toggle('favourite');
-
-            const resultFav = listFavouriteArr.findIndex((row => row.malId === serieID));
-            if (resultFav === -1) {
-              listFavouriteArr.push(favData);
-              localStorage.setItem('Fav', JSON.stringify(listFavouriteArr));
-            } else {
-              listFavouriteArr.splice(resultFav, 1);
-              localStorage.setItem('Fav', JSON.stringify(listFavouriteArr));
-            }
-            for (const eachFav of listFavouriteArr){
-              listFavourites.innerHTML += `<li class="js-liFav colorLi" data-id="${eachFav.malId}"> <img class="js-img" src="${eachFav.imageUrl}" alt="Serie Image"> <p>${eachFav.title}</p><button class="js-btnX colorBtnX" title="Pulse para borrar de la lista" id="${eachFav.malId}">X</button></li>`;
-            }
-          }
-        }
-        const allBtnX = document.querySelectorAll('.js-btnX');
-        for (const eachBtn of allBtnX) {
-          eachBtn.addEventListener('click', handleClickDeleteOne);
-        }
-
-        function handleClickListFav (event) {
-          const liIdFav = parseInt(event.currentTarget.dataset.id);
-          // console.log(liIdFav);
-          const resultFindFav = listFavouriteArr.find ((row => row.malId === liIdFav));
-          if (resultFindFav !== -1){
-            //console.log(resultFindFav.title);
-          }
-        }
-
-        const allLiFav = document.querySelectorAll('.js-liFav');
-        for (const eachLiFav of allLiFav) {
-          eachLiFav.addEventListener('click', handleClickListFav);
-        }
-      }
       const allLi = document.querySelectorAll('.js-li');
       for (const eachLi of allLi) {
         eachLi.addEventListener('click', (handleClickRenderListFav));
@@ -101,6 +55,61 @@ function getDataSeries () {
       }
 
     });
+}
+
+// Función renderizar lista fav al clickar en lista resultados, evento click boton X, evento click lista favoritos.
+function handleClickRenderListFav(event) {
+  event.preventDefault();
+  const serieID = parseInt(event.currentTarget.dataset.id);
+  for (const eachSerie of listSeriesArr) {
+    let favData = {
+      malId: eachSerie.id,
+      url: eachSerie.url,
+      imageUrl: eachSerie.img,
+      title: eachSerie.title,
+      airing: eachSerie.airing,
+    };
+
+    if (serieID === eachSerie.id) {
+      listFavourites.innerHTML = '';
+
+      const resultFav = listFavouriteArr.findIndex((row => row.malId === serieID));
+      if (resultFav === -1) {
+        event.currentTarget.classList.add('favourite');
+        listFavouriteArr.push(favData);
+        localStorage.setItem('Fav', JSON.stringify(listFavouriteArr));
+      } else {
+        event.currentTarget.classList.remove('favourite');
+        listFavouriteArr.splice(resultFav, 1);
+        localStorage.setItem('Fav', JSON.stringify(listFavouriteArr));
+      }
+      renderFavHTML();
+    }
+  }
+  const allBtnX = document.querySelectorAll('.js-btnX');
+  for (const eachBtn of allBtnX) {
+    eachBtn.addEventListener('click', handleClickDeleteOne);
+  }
+
+  const allLiFav = document.querySelectorAll('.js-liFav');
+  for (const eachLiFav of allLiFav) {
+    eachLiFav.addEventListener('click', handleClickListFav);
+  }
+}
+// Funcion clickar lista de fav y mostrar titulo por consola.
+function handleClickListFav (event) {
+  const liIdFav = parseInt(event.currentTarget.dataset.id);
+  const resultFindFav = listFavouriteArr.find ((row => row.malId === liIdFav));
+  if (resultFindFav !== -1){
+    //console.log(resultFindFav.title);
+  }
+}
+
+//Funcion bucle for en array favoritos para pintar en HTML.
+function renderFavHTML () {
+  for (const eachFav of listFavouriteArr){
+    listFavourites.innerHTML += `<li class="js-liFav colorLi" data-id="${eachFav.malId}"> <img class="js-img" src="${eachFav.imageUrl}" alt="Serie Image"> <p>${eachFav.title}</p><button class="js-btnX colorBtnX" title="Pulse para borrar de la lista" id="${eachFav.malId}">X</button></li>`;
+  }
 }
 
 // Funcion usar datos LocalStorage.
@@ -127,18 +136,25 @@ function handleClickDeleteOne (event) {
   const eachIdBtn = event.currentTarget.id;
   listFavourites.innerHTML = '';
 
+  const allLi = document.querySelectorAll('.js-li');
+  for (const eachLi of allLi){
+    const eachID = eachLi.id;
+    if (eachID === eachIdBtn) {
+      eachLi.classList.remove('favourite');
+    }
+  }
+
   const resultFav = listFavouriteArr.findIndex( ((row) => row.malId === parseInt(eachIdBtn)));
   listFavouriteArr.splice(resultFav, 1);
   localStorage.setItem('Fav', JSON.stringify(listFavouriteArr));
 
-  for (const eachFav of listFavouriteArr) {
-    listFavourites.innerHTML += `<li class="js-li colorLi" data-id="${eachFav.malId}"> <img class="js-img" src="${eachFav.imageUrl}" alt="Serie Image"> <p>${eachFav.title}</p><button class="js-btnX colorBtnX" title="Pulse para borrar de la lista" id="${eachFav.malId}">X</button></li>`;
-    const allBtnX = document.querySelectorAll('.js-btnX');
-    for (const eachBtn of allBtnX) {
-      eachBtn.addEventListener('click', handleClickDeleteOne);
-    }
+  renderFavHTML();
+  const allBtnX = document.querySelectorAll('.js-btnX');
+  for (const eachBtn of allBtnX) {
+    eachBtn.addEventListener('click', handleClickDeleteOne);
   }
 }
+
 
 // Funciones Input, boton Buscar, Reset y Borrar Lista.
 function handleDeleteAllFav (event) {
@@ -167,8 +183,8 @@ function handleClickReset (event) {
   event.preventDefault();
   listResults.innerHTML = '';
   inputSearch.value = '';
-  textError.innerHTML = '';
   handleInputSearch ();
+  textError.innerHTML = '';
 }
 
 btnDeleteAllFav.addEventListener('click', (handleDeleteAllFav));
