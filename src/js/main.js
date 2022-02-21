@@ -15,7 +15,7 @@ let listFavouriteArr = [];
 
 
 // Función petición servidor, añadir evento click resultados para pintar en fav, pintar como favorito en resultados si esta en array fav.
-function getDataSeries () {
+function getDataSeries() {
   fetch(`https://api.jikan.moe/v3/search/anime?q=${inputSearch.value}`)
     .then(response => response.json())
     .then(data => {
@@ -26,7 +26,8 @@ function getDataSeries () {
           title: anime.title,
           img: anime.image_url,
           airing: anime.airing,
-          url: anime.url};
+          url: anime.url
+        };
         return objectDataAnime;
       }));
       listSeriesArr = dataMapAnime;
@@ -47,7 +48,7 @@ function getDataSeries () {
 
       for (const eachFav of listFavouriteArr) {
         const oneIdFav = eachFav.malId;
-        for (const oneLi of allLi){
+        for (const oneLi of allLi) {
           const oneIdLi = parseInt(oneLi.id);
           if (oneIdLi === oneIdFav) {
             oneLi.classList.add('favourite');
@@ -98,23 +99,23 @@ function handleClickRenderListFav(event) {
   }
 }
 // Funcion clickar lista de fav y mostrar titulo por consola.
-function handleClickListFav (event) {
+function handleClickListFav(event) {
   const liIdFav = parseInt(event.currentTarget.dataset.id);
-  const resultFindFav = listFavouriteArr.find ((row => row.malId === liIdFav));
-  if (resultFindFav !== -1){
+  const resultFindFav = listFavouriteArr.find((row => row.malId === liIdFav));
+  if (resultFindFav !== -1) {
     //console.log(resultFindFav.title);
   }
 }
 
 //Funcion bucle for en array favoritos para pintar en HTML.
-function renderFavHTML () {
-  for (const eachFav of listFavouriteArr){
+function renderFavHTML() {
+  for (const eachFav of listFavouriteArr) {
     listFavourites.innerHTML += `<li class="js-liFav colorLi" data-id="${eachFav.malId}"> <img class="js-img" src="${eachFav.imageUrl}" alt="Serie Image"> <p>${eachFav.title}</p><button class="js-btnX colorBtnX" title="Pulse para borrar de la lista" id="${eachFav.malId}">X</button></li>`;
   }
 }
 
 // Funcion usar datos LocalStorage.
-function useLocalFav () {
+function useLocalFav() {
   const localFav = JSON.parse(localStorage.getItem('Fav'));
   if (localFav === null) {
     listFavourites.innerHTML = '';
@@ -125,27 +126,27 @@ function useLocalFav () {
     }
   }
 }
-useLocalFav ();
+useLocalFav();
 
 // Funcion boton X de list fav.
 const allBtnX = document.querySelectorAll('.js-btnX');
 for (const eachBtn of allBtnX) {
   eachBtn.addEventListener('click', handleClickDeleteOne);
 }
-function handleClickDeleteOne (event) {
+function handleClickDeleteOne(event) {
   event.preventDefault();
   const eachIdBtn = event.currentTarget.id;
   listFavourites.innerHTML = '';
 
   const allLi = document.querySelectorAll('.js-li');
-  for (const eachLi of allLi){
+  for (const eachLi of allLi) {
     const eachID = eachLi.id;
     if (eachID === eachIdBtn) {
       eachLi.classList.remove('favourite');
     }
   }
 
-  const resultFav = listFavouriteArr.findIndex( ((row) => row.malId === parseInt(eachIdBtn)));
+  const resultFav = listFavouriteArr.findIndex(((row) => row.malId === parseInt(eachIdBtn)));
   listFavouriteArr.splice(resultFav, 1);
   localStorage.setItem('Fav', JSON.stringify(listFavouriteArr));
 
@@ -157,13 +158,13 @@ function handleClickDeleteOne (event) {
 }
 
 // Funciones  Borrar Lista, Input, boton Buscar, Reset.
-function handleDeleteAllFav (event) {
+function handleDeleteAllFav(event) {
   event.preventDefault();
   listFavourites.innerHTML = '';
   localStorage.removeItem('Fav');
   listFavouriteArr = [];
   const allLi = document.querySelectorAll('.js-li');
-  for (const eachLi of allLi){
+  for (const eachLi of allLi) {
     const eachID = eachLi.id;
     const resultFav = listFavouriteArr.findIndex((row => row.malId === eachID));
     if (resultFav === -1) {
@@ -173,7 +174,7 @@ function handleDeleteAllFav (event) {
 }
 btnDeleteAllFav.addEventListener('click', (handleDeleteAllFav));
 
-function handleInputSearch () {
+function handleInputSearch() {
   if (inputSearch.value === '') {
     textError.innerHTML = 'Campo de búsqueda vacío';
     btnSearch.setAttribute('disabled', 'disabled');
@@ -190,20 +191,20 @@ function handleClickSearch(event) {
 }
 btnSearch.addEventListener('click', handleClickSearch);
 
-function handleClickReset (event) {
+function handleClickReset(event) {
   event.preventDefault();
   listResults.innerHTML = '';
   inputSearch.value = '';
-  handleInputSearch ();
+  handleInputSearch();
   textError.innerHTML = '';
 }
 btnReset.addEventListener('click', handleClickReset);
 
 const handleForm = (event) => {
-  if(event.keyCode === 13) {
+  if (event.keyCode === 13) {
     event.preventDefault();
   }
 };
-form.addEventListener('keypress', handleForm );
+form.addEventListener('keypress', handleForm);
 
 
