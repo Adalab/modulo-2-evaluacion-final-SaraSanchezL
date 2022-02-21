@@ -8,6 +8,7 @@ const inputSearch = document.querySelector('.js-inputSearch');
 const listFavourites = document.querySelector('.js-listFavourites');
 const btnDeleteAllFav = document.querySelector('.js-btnDeleteAll');
 const textError = document.querySelector('.js-textError');
+const form = document.querySelector('.js-form');
 
 let listSeriesArr = [];
 let listFavouriteArr = [];
@@ -35,7 +36,7 @@ function getDataSeries () {
           listResults.innerHTML += `<li class="js-li colorLi" id="${listSeriesArr[i].id}" data-id="${listSeriesArr[i].id}"> <img class="js-img cursorSelectFav" title="Marcar / Desmarcar Favorita" src="${listSeriesArr[i].img}" alt="Serie Image"><p class="cursorSelectFav" title="Marcar / Desmarcar Favorita">${listSeriesArr[i].title}</p> <p> ${listSeriesArr[i].airing} : No se está transmitiendo. </p> </li>`;
 
         } else {
-          listResults.innerHTML += `<li class="js-li colorLi" id="${listSeriesArr[i].id}" data-id="${listSeriesArr[i].id}"> <img class="js-img cursorSelectFav" title="Marcar / Desmarcar Favorita" src="${listSeriesArr[i].img}" alt="Serie Image"><p class="cursorSelectFav" title="Marcar / Desmarcar Favorita">${listSeriesArr[i].title}</p> <p> ${listSeriesArr[i].airing} <a href="${listSeriesArr[i].url}">Mas detalles</a> </p> </li>`;
+          listResults.innerHTML += `<li class="js-li colorLi" id="${listSeriesArr[i].id}" data-id="${listSeriesArr[i].id}"> <img class="js-img cursorSelectFav" title="Marcar / Desmarcar Favorita" src="${listSeriesArr[i].img}" alt="Serie Image"><p class="cursorSelectFav" title="Marcar / Desmarcar Favorita">${listSeriesArr[i].title}</p> <p> ${listSeriesArr[i].airing} : Se está transmitiendo. Click para ver más detalle.</p></li> <li><a class="link" href="${listSeriesArr[i].url}">Más detalles</a></li>`;
         }
       }
 
@@ -155,14 +156,22 @@ function handleClickDeleteOne (event) {
   }
 }
 
-
-// Funciones Input, boton Buscar, Reset y Borrar Lista.
+// Funciones  Borrar Lista, Input, boton Buscar, Reset.
 function handleDeleteAllFav (event) {
   event.preventDefault();
   listFavourites.innerHTML = '';
   localStorage.removeItem('Fav');
   listFavouriteArr = [];
+  const allLi = document.querySelectorAll('.js-li');
+  for (const eachLi of allLi){
+    const eachID = eachLi.id;
+    const resultFav = listFavouriteArr.findIndex((row => row.malId === eachID));
+    if (resultFav === -1) {
+      eachLi.classList.remove('favourite');
+    }
+  }
 }
+btnDeleteAllFav.addEventListener('click', (handleDeleteAllFav));
 
 function handleInputSearch () {
   if (inputSearch.value === '') {
@@ -173,11 +182,13 @@ function handleInputSearch () {
     btnSearch.removeAttribute('disabled');
   }
 }
+inputSearch.addEventListener('keyup', handleInputSearch);
 
 function handleClickSearch(event) {
   event.preventDefault();
   getDataSeries();
 }
+btnSearch.addEventListener('click', handleClickSearch);
 
 function handleClickReset (event) {
   event.preventDefault();
@@ -186,9 +197,13 @@ function handleClickReset (event) {
   handleInputSearch ();
   textError.innerHTML = '';
 }
-
-btnDeleteAllFav.addEventListener('click', (handleDeleteAllFav));
-inputSearch.addEventListener('keyup', handleInputSearch);
-btnSearch.addEventListener('click', handleClickSearch);
 btnReset.addEventListener('click', handleClickReset);
+
+const handleForm = (event) => {
+  if(event.keyCode === 13) {
+    event.preventDefault();
+  }
+};
+form.addEventListener('keypress', handleForm );
+
 
